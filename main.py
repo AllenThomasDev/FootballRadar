@@ -53,7 +53,7 @@ def main():
     data = load_data()
     all_players = sorted(list(data['player']))
     
-    selected_players = st.sidebar.multiselect("Select players", all_players, default = ["Martin Ødegaard","Kai Havertz","Declan Rice"],max_selections=3)
+    selected_players = st.sidebar.multiselect("Select players", all_players, default = ["Martin Ødegaard","Casemiro","Declan Rice"],max_selections=3)
     
     fig = plt.figure(figsize=(8, 8))
     fig.patch.set_facecolor('black')
