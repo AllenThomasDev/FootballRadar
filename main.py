@@ -1,6 +1,12 @@
 import streamlit as st
-import plotly.graph_objects as go
+import matplotlib.pyplot as plt
+import numpy as np
+import textwrap
 import pandas as pd
+import seaborn as sns
+
+from complex_radar import ComplexRadar
+
 
 def load_data():
     data = pd.DataFrame()
@@ -26,38 +32,42 @@ metrics = {
 }
 
 df = load_data()
-hav_df = df[df['player'] == 'Kai Havertz']
-print(hav_df['minutes'].values[0], type(hav_df['minutes'].values[0]))
+format_cfg = {
+    'rad_ln_args': {'visible':True, 'color': 'grey', 'linestyle':'--'},
+    'outer_ring': {'visible':True},
+    'angle_ln_args' : {'visible':False},
+    'rgrid_tick_lbls_args': {'fontsize':12, 'color': 'white', 'va':'bottom', 'ha':'left'},
+    'theta_tick_lbls': {'fontsize':15},
+    'theta_tick_lbls_pad':25,
+    'theta_tick_color' : 'grey',
+    'axes_args' : {'facecolor':'black'},
+    'incl_endpoint' : True
+}
+
+ranges = [(0, 3.28), (0, 4.88), (0, 15.54), (0, 9.69), (0, 2.22), (0, 4.26), (0, 4.04), (0, 1.3), (0, 6.78), (0, 3.57)]
 
 def main():
-    st.title("Soccer Player Comparison")
+    sns.set_style("dark")
+    st.title("Midfielders Comparison 2022/23")
     data = load_data()
     all_players = sorted(list(data['player']))
     
-    selected_players = st.sidebar.multiselect("Select players", all_players, max_selections=3)
+    selected_players = st.sidebar.multiselect("Select players", all_players, default = ["Martin Ødegaard","Kai Havertz","Declan Rice"],max_selections=3)
     
-    fig = go.Figure()
+    fig = plt.figure(figsize=(8, 8))
+    fig.patch.set_facecolor('black')
+    radar = ComplexRadar(fig, list(metrics.keys()), n_ring_levels=5 ,ranges=ranges, show_scales=True, format_cfg=format_cfg)
     
     for player in selected_players:
         player_data = data[data['player'] == player]
         minutes_played = player_data['minutes'].values[0]
-        values = [(player_data[metrics[metric]].values[0]*90/minutes_played) for metric in metrics]
-        
-        fig.add_trace(go.Scatterpolar(
-            r=values,
-            theta=list(metrics.keys()),
-            fill='toself',
-            name=player
-        ))
+        values = [round((player_data[metrics[metric]].values[0]*90/minutes_played),2) for metric in metrics.keys()]
+        print(player)
+        radar.plot(values, label=player, marker='o')
+        radar.fill(values, alpha=0.5)
     
-    fig.update_layout(
-        polar=dict(
-            radialaxis=dict(visible=True)
-        ),
-        showlegend=True
-    )
-    
-    st.plotly_chart(fig, use_container_width=True)
+    radar.use_legend(loc='upper left', bbox_to_anchor=(1.1, 1))    
+    st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
