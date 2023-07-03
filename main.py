@@ -16,6 +16,7 @@ def load_data():
         df['League'] = league
         data = pd.concat([data, df])
     data = data[data['minutes'] >= 1080]
+    data = data[data['position'].isin(['MF', 'MF,FW', 'MF,DF', 'DF,MF'])]
     return data
 
 metrics = {
