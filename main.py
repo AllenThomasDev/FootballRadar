@@ -37,12 +37,12 @@ template_metrics = {
                     'Final third entries': 'carries_into_final_third',
                     'Passes into final third': 'passes_into_final_third',
                     'Ball recoveries': 'ball_recoveries',
-                    'Interceptions made': 'interceptions',
-                    'Tackles made': 'tackles',
+                    'Interceptions': 'interceptions',
+                    'Tackles': 'tackles',
                     'Aerial duels won': 'aerials_won',
                     'Shots attempted': 'shots_on_target',
-                    'Touches in opposition box': 'touches_att_pen_area',
-                    'Assisted Shot': 'assisted_shots'}},
+                    'Touches in the Box': 'touches_att_pen_area',
+                    'Chances Created': 'assisted_shots'}},
     "Forwards": {"metrics":{
                     'Goals': 'goals',
                     'Shots On Target': 'shots_on_target',
@@ -53,16 +53,13 @@ template_metrics = {
                     "Assists" : "assists",
                     'Chances Created': 'assisted_shots'}}, 
     "Defenders": {"metrics":{
-                    'Penalty area entries': 'carries_into_penalty_area',
-                    'Final third entries': 'carries_into_final_third',
-                    'Passes into final third': 'passes_into_final_third',
-                    'Ball recoveries': 'ball_recoveries',
-                    'Interceptions made': 'interceptions',
-                    'Tackles made': 'tackles',
-                    'Aerial duels won': 'aerials_won',
-                    'Shots attempted': 'shots_on_target',
-                    'Touches in opposition box': 'touches_att_pen_area',
-                    'Assisted Shot': 'assisted_shots'}}}
+                    'Interceptions': 'interceptions',
+                    'Ball Recoveries': 'ball_recoveries',
+                    'Tackles': 'tackles',
+                    'Blocks': 'blocks',
+                    'Clearances': 'clearances',
+                    'Aerials Won': 'aerials_won',
+                    'Chances Created': 'assisted_shots'}}}
 
 
 df = load_data()
@@ -82,7 +79,7 @@ template_metrics['Defenders']['ranges']=def_ranges
 template_metrics['Defenders']['data']=def_df
 template_metrics['Midfielders']['default']=["Martin Ødegaard" , "Kai Havertz" ,"Declan Rice"]
 template_metrics['Forwards']['default']=["Kylian Mbappé" , "Erling Haaland" ,"Lionel Messi"]
-template_metrics['Defenders']['default']=["Virgil van Dijk","Kim Min-jae","John Stones"]
+template_metrics['Defenders']['default']=["Virgil van Dijk","Trent Alexander-Arnold","Aaron Wan-Bissaka"]
 
 format_cfg = {
     'rad_ln_args': {'visible': True, 'color': 'grey', 'linestyle': '--', 'zorder': 1},
