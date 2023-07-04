@@ -7,6 +7,9 @@ import seaborn as sns
 
 from complex_radar import ComplexRadar
 
+colors = ["#f72585ff" ,"#7209b7ff" ,"#3a0ca3ff" ,"#4361eeff" ,"#4cc9f0ff", "#c77dff"]
+
+
 
 def load_data():
     data = pd.DataFrame()
@@ -34,10 +37,10 @@ metrics = {
 
 df = load_data()
 format_cfg = {
-    'rad_ln_args': {'visible':True, 'color': 'grey', 'linestyle':'--'},
-    'outer_ring': {'visible':True},
+    'rad_ln_args': {'visible':True, 'color': 'grey', 'linestyle':'--','zorder' :1},
+    'outer_ring': {'visible':False},
     'angle_ln_args' : {'visible':False},
-    'rgrid_tick_lbls_args': {'fontsize':12, 'color': 'white', 'va':'bottom', 'ha':'left'},
+    'rgrid_tick_lbls_args': {'fontsize':12, 'color': 'white', 'va':'center', 'ha':'center' ,'zorder' :10},
     'theta_tick_lbls': {'fontsize':15},
     'theta_tick_lbls_pad':25,
     'theta_tick_color' : 'grey',
@@ -59,15 +62,15 @@ def main():
     fig.patch.set_facecolor('black')
     radar = ComplexRadar(fig, list(metrics.keys()), n_ring_levels=5 ,ranges=ranges, show_scales=True, format_cfg=format_cfg)
     
-    for player in selected_players:
+    for idx,player in enumerate(selected_players):
         player_data = data[data['player'] == player]
         minutes_played = player_data['minutes'].values[0]
         values = [round((player_data[metrics[metric]].values[0]*90/minutes_played),2) for metric in metrics.keys()]
         print(player)
-        radar.plot(values, label=player, marker='o')
-        radar.fill(values, alpha=0.5)
+        radar.plot(values,color = colors[idx] ,alpha=0.3,marker='o',markersize=4)
+        radar.fill(values,color = colors[idx] , label=player,alpha=0.5)
     
-    radar.use_legend(loc='upper left', bbox_to_anchor=(1.1, 1))    
+    radar.use_legend(loc='upper left',bbox_to_anchor=(1.1, 1))    
     st.pyplot(fig)
 
 if __name__ == "__main__":

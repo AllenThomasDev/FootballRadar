@@ -80,15 +80,14 @@ class ComplexRadar():
             gridlabel[0] = "" # remove values from the center
             gridlabel[2] = "" # remove values from the center
             gridlabel[3] = "" # remove values from the center
+            
             lines, labels = ax.set_rgrids(grid, 
                                           labels=gridlabel, 
                                           angle=angles[j],
                                           **self.format_cfg['rgrid_tick_lbls_args']
                                          )
-            
             ax.spines["polar"].set_visible(False)
             ax.grid(visible=False)
-            
             if show_scales == False:
                 ax.set_yticklabels([])
 
@@ -116,7 +115,7 @@ class ComplexRadar():
         # ax1 is the duplicate of axes[0] (self.ax)
         # Remove everything from ax1 except the plot itself
         self.ax1.axis('off')
-        self.ax1.set_zorder(9)
+        self.ax1.set_zorder(0)
         
         # Create the outer labels for each variable
         l, text = self.ax.set_thetagrids(angles, labels=variables)
@@ -125,6 +124,7 @@ class ComplexRadar():
         labels = [t.get_text() for t in self.ax.get_xticklabels()]
         labels = ['\n'.join(textwrap.wrap(l, self.format_cfg['theta_tick_lbls_txt_wrap'], 
                                           break_long_words=self.format_cfg['theta_tick_lbls_brk_lng_wrds'])) for l in labels]
+
         self.ax.set_xticklabels(labels, **self.format_cfg['theta_tick_lbls'])
         
         for t,a in zip(self.ax.get_xticklabels(),angles):
@@ -136,6 +136,7 @@ class ComplexRadar():
                 t.set_ha('center')
             else:
                 t.set_ha('right')
+            
 
         self.ax.tick_params(axis='both', pad=self.format_cfg['theta_tick_lbls_pad'])
         self.ax.tick_params(axis='x', colors=format_cfg['theta_tick_color'])
@@ -156,6 +157,7 @@ class ComplexRadar():
         """Plots a line"""
         sdata = self._scale_data(data, self.ranges)
         self.ax1.plot(self.angle, np.r_[sdata, sdata[0]], *args, **kwargs)
+        self.ax1.set_zorder(0)
         self.plot_counter = self.plot_counter+1
     
     def fill(self, data, *args, **kwargs):
